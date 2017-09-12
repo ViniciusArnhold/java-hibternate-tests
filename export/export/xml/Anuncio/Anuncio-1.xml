@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<anuncio>
+    <anunciante>
+        <email>contato@profissional.aol</email>
+        <nome>Carlos Alberto</nome>
+        <telefone>telefone como string</telefone>
+        <classificacao>3.6</classificacao>
+        <nomeFantasia>Loja do Ferramentas</nomeFantasia>
+    </anunciante>
+    <dataPublicacao>2017-09-12T19:20:44.475-03:00</dataPublicacao>
+    <descricao>Anuncio de Enchada do Carlos</descricao>
+    <disponivel>true</disponivel>
+    <id>3</id>
+    <titulo>Venda de Enchadas</titulo>
+    <valor>12.34</valor>
+</anuncio>

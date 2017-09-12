@@ -13,7 +13,6 @@ import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -32,6 +31,8 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
 
+        System.setProperty("log4j.logger.org.hibernate", "severe");
+
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("bd2_anuncios");
 
         Main instance = new Main(factory.createEntityManager());
@@ -47,32 +48,25 @@ public class Main {
 
         anuncios.forEach(anuncio -> listarAnuncios(anuncio.getAnunciante(), Integer.MAX_VALUE));
 
-        marshalXML(anuncios);
-
-        //marshalJSON(anuncios);
+        marshalAll(anuncios, new JAXBMarshaller(Anuncio.class, Anunciante.class));
+        marshalAll(anuncios, new JacksonMarshaller());
     }
 
-    private void marshalJSON(List<Anuncio> anuncios) throws Exception {
-        Marshaller marshaller = new JacksonMarshaller();
 
-        for (Anuncio anuncio : anuncios) {
-            File file = new File(rootExport, "json/anuncios/anuncio-" + anuncio.getId() + ".json");
+    private <T> void marshalAll(Iterable<T> objs, Marshaller marshaller) throws Exception {
+
+        int count = 1;
+        for (T obj : objs) {
+            File file = new File(rootExport, String.format("/export/%s/%s/%s",
+                    marshaller.getExtensionName(),
+                    obj.getClass().getSimpleName(),
+                    marshaller.fileNameFor(obj, count++)));
+
             file.getParentFile().mkdirs();
             file.createNewFile();
-            marshaller.marshal(anuncio, new FileOutputStream(file));
+            marshaller.marshal(obj, new FileOutputStream(file));
         }
-    }
 
-    private void marshalXML(List<Anuncio> anuncios) throws Exception {
-
-        Marshaller marshaller = new JAXBMarshaller(Anunciante.class, Anuncio.class, Usuario.class);
-
-        for (Anuncio anuncio : anuncios) {
-            File file = new File(rootExport, "xml/anuncios/anuncio-" + anuncio.getId() + ".xml");
-            file.getParentFile().mkdirs();
-            file.createNewFile();
-            marshaller.marshal(anuncio, new FileOutputStream(file));
-        }
     }
 
     private Set<Anuncio> listarAnuncios(Anunciante anunciante, int tamanho) {
@@ -85,7 +79,7 @@ public class Main {
 
         Anunciante resultList = query.setMaxResults(tamanho).getSingleResult();
 
-        System.out.println("Todos os anuncios do Anunciante: " + anunciante);
+        System.out.println("Todos os anuncios do Anunciante: " + anunciante.getNome());
 
         resultList.getAnuncios().forEach(System.out::println);
 
@@ -118,7 +112,7 @@ public class Main {
                     .setEmail("ola@hello.me");
 
             Anuncio anuncioDeFerramentas = new Anuncio(anunciante)
-                    .setDataPublicacao(ZonedDateTime.now())
+                    .setDataPublicacao(new java.util.Date())
                     .setTitulo("Venda de Enchadas")
                     .setDescricao("Anuncio de Enchada do Carlos")
                     .setDisponivel(true)
@@ -130,7 +124,7 @@ public class Main {
 
             entityManager.persist(anunciante);
 
-            entityManager.merge(interessado1);
+            entityManager.persist(interessado1);
 
             entityManager.persist(interessado2);
 

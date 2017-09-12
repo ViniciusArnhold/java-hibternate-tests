@@ -15,7 +15,12 @@ public class JacksonMarshaller implements Marshaller {
 
     @Override
     public void marshal(Object o, OutputStream out) throws IOException {
-        this.objectMapper.writer().writeValue(out, o);
+        this.objectMapper.writerWithDefaultPrettyPrinter().writeValue(out, o);
 
+    }
+
+    @Override
+    public String getExtensionName() {
+        return "json";
     }
 }

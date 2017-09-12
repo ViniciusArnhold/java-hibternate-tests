@@ -1,9 +1,10 @@
 package br.unisinos.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,8 +17,9 @@ public class Anunciante extends Usuario implements Serializable {
     @Column(length = 50, nullable = false)
     private String nomeFantasia;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "anunciante", cascade = CascadeType.ALL)
-    private Set<Anuncio> anuncios;
+    private transient Set<Anuncio> anuncios;
 
     public Anunciante() {
     }
@@ -68,5 +70,14 @@ public class Anunciante extends Usuario implements Serializable {
         }
         this.anuncios.add(anuncio);
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Anunciante{" +
+                "classificacao=" + classificacao +
+                ", nomeFantasia='" + nomeFantasia + '\'' +
+                ", anuncios=" + anuncios +
+                '}';
     }
 }

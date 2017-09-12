@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -23,19 +23,18 @@ public class Anuncio implements Serializable {
     @Column(length = 225)
     private String descricao;
 
+    //JAXB nao suporta java.time
     @Column(nullable = false)
-    private ZonedDateTime dataPublicacao;
+    private Date dataPublicacao;
 
     @Column(nullable = false)
     private double valor;
 
     @Column(nullable = false)
-
     private boolean disponivel;
 
     @ManyToOne
     @JoinColumn(name = "ANUNCIANTE_ID")
-
     private Anunciante anunciante;
 
     public Anuncio() {
@@ -72,11 +71,11 @@ public class Anuncio implements Serializable {
     }
 
     @XmlElement
-    public ZonedDateTime getDataPublicacao() {
+    public Date getDataPublicacao() {
         return dataPublicacao;
     }
 
-    public Anuncio setDataPublicacao(ZonedDateTime dataPublicacao) {
+    public Anuncio setDataPublicacao(Date dataPublicacao) {
         this.dataPublicacao = dataPublicacao;
         return this;
     }

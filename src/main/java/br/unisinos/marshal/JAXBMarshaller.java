@@ -14,11 +14,17 @@ public class JAXBMarshaller implements Marshaller {
     public JAXBMarshaller(Class<?>... recognizedClasses) throws JAXBException {
         this.context = JAXBContext.newInstance(recognizedClasses);
         this.marshaller = this.context.createMarshaller();
+        this.marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
         this.unmarshaller = this.context.createUnmarshaller();
     }
 
     @Override
     public void marshal(Object o, OutputStream out) throws JAXBException {
-        this.marshaller.marshal(o,out);
+        this.marshaller.marshal(o, out);
+    }
+
+    @Override
+    public Object getExtensionName() {
+        return "xml";
     }
 }

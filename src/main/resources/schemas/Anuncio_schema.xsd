@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="anuncio" type="anuncio"/>
+
+    <xs:complexType name="anuncio">
+        <xs:sequence>
+            <xs:element name="anunciante" type="anunciante" minOccurs="0"/>
+            <xs:element name="dataPublicacao" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="descricao" type="xs:string" minOccurs="0"/>
+            <xs:element name="disponivel" type="xs:boolean"/>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="titulo" type="xs:string" minOccurs="0"/>
+            <xs:element name="valor" type="xs:double"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="anunciante">
+        <xs:complexContent>
+            <xs:extension base="usuario">
+                <xs:sequence>
+                    <xs:element name="classificacao" type="xs:double"/>
+                    <xs:element name="nomeFantasia" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="usuario">
+        <xs:sequence>
+            <xs:element name="email" type="xs:string" minOccurs="0"/>
+            <xs:element name="interesses" type="anuncio" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="nome" type="xs:string" minOccurs="0"/>
+            <xs:element name="telefone" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
+
