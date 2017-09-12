@@ -1,12 +1,15 @@
 package br.unisinos.model;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "ANUNCIO")
+@XmlRootElement
 public class Anuncio implements Serializable {
 
     @Id
@@ -27,20 +30,28 @@ public class Anuncio implements Serializable {
     private double valor;
 
     @Column(nullable = false)
+
     private boolean disponivel;
 
     @ManyToOne
     @JoinColumn(name = "ANUNCIANTE_ID")
+
     private Anunciante anunciante;
+
+    public Anuncio() {
+
+    }
 
     public Anuncio(Anunciante anunciante) {
         this.anunciante = Objects.requireNonNull(anunciante);
     }
 
+    @XmlElement
     public long getId() {
         return id;
     }
 
+    @XmlElement
     public String getTitulo() {
         return titulo;
     }
@@ -50,6 +61,7 @@ public class Anuncio implements Serializable {
         return this;
     }
 
+    @XmlElement
     public String getDescricao() {
         return descricao;
     }
@@ -59,6 +71,7 @@ public class Anuncio implements Serializable {
         return this;
     }
 
+    @XmlElement
     public ZonedDateTime getDataPublicacao() {
         return dataPublicacao;
     }
@@ -68,6 +81,7 @@ public class Anuncio implements Serializable {
         return this;
     }
 
+    @XmlElement
     public double getValor() {
         return valor;
     }
@@ -77,6 +91,7 @@ public class Anuncio implements Serializable {
         return this;
     }
 
+    @XmlElement
     public boolean isDisponivel() {
         return disponivel;
     }
@@ -84,6 +99,11 @@ public class Anuncio implements Serializable {
     public Anuncio setDisponivel(boolean disponivel) {
         this.disponivel = disponivel;
         return this;
+    }
+
+    @XmlElement
+    public Anunciante getAnunciante() {
+        return anunciante;
     }
 
     @Override
