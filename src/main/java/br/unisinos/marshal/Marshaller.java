@@ -8,7 +8,7 @@ public interface Marshaller {
 
     Object getExtensionName();
 
-    default String fileNameFor(Object obj, int count) {
-        return String.format("%s-%d.%s", obj.getClass().getSimpleName(), count, getExtensionName());
+    default String fileNameFor(Object obj, String suffix) {
+        return String.format("%s-%s.%s", obj.getClass().getSimpleName(), suffix, getExtensionName());
     }
 }

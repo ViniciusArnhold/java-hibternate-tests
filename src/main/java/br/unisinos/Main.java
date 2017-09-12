@@ -1,5 +1,7 @@
 package br.unisinos;
 
+import br.unisinos.dao.AnuncianteDAO;
+import br.unisinos.dao.AnuncioDAO;
 import br.unisinos.marshal.JAXBMarshaller;
 import br.unisinos.marshal.JacksonMarshaller;
 import br.unisinos.marshal.Marshaller;
@@ -10,11 +12,9 @@ import br.unisinos.model.Usuario;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,9 +44,10 @@ public class Main {
 
         adicionarDados();
 
-        List<Anuncio> anuncios = listarTodosAnuncios();
+        List<Anuncio> anuncios = new AnuncioDAO().listarTodosAnuncios();
 
-        anuncios.forEach(anuncio -> listarAnuncios(anuncio.getAnunciante(), Integer.MAX_VALUE));
+        AnuncianteDAO anuncianteDAO = new AnuncianteDAO();
+        anuncios.forEach(anuncio -> anuncianteDAO.listarAnuncios(anuncio.getAnunciante(), Integer.MAX_VALUE));
 
         marshalAll(anuncios, new JAXBMarshaller(Anuncio.class, Anunciante.class));
         marshalAll(anuncios, new JacksonMarshaller());
@@ -60,32 +61,12 @@ public class Main {
             File file = new File(rootExport, String.format("/export/%s/%s/%s",
                     marshaller.getExtensionName(),
                     obj.getClass().getSimpleName(),
-                    marshaller.fileNameFor(obj, count++)));
+                    marshaller.fileNameFor(obj, Integer.toString(count++))));
 
             file.getParentFile().mkdirs();
             file.createNewFile();
             marshaller.marshal(obj, new FileOutputStream(file));
         }
-
-    }
-
-    private Set<Anuncio> listarAnuncios(Anunciante anunciante, int tamanho) {
-        TypedQuery<Anunciante> query =
-                this.entityManager.createQuery("" +
-                        "select anunciante " +
-                        "from Anunciante anunciante " +
-                        "where anunciante.id = :aId", Anunciante.class);
-        query.setParameter("aId", anunciante.getId());
-
-        Anunciante resultList = query.setMaxResults(tamanho).getSingleResult();
-
-        System.out.println("Todos os anuncios do Anunciante: " + anunciante.getNome());
-
-        resultList.getAnuncios().forEach(System.out::println);
-
-        System.out.println("-----------------------------");
-
-        return resultList.getAnuncios();
 
     }
 
@@ -136,20 +117,5 @@ public class Main {
             throw e;
         }
 
-    }
-
-    public List<Anuncio> listarTodosAnuncios() {
-        System.out.println("Todos os Anuncios: ");
-
-        TypedQuery<Anuncio> query =
-                entityManager.createQuery("select a from Anuncio a", Anuncio.class);
-
-        List<Anuncio> resultList = query.getResultList();
-
-        System.out.println("Anuncios no banco: ");
-        resultList.forEach(System.out::println);
-        System.out.println("-------------------");
-
-        return resultList;
     }
 }
