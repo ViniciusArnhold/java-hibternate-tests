@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<usuario>
+    <email>not@real.ly</email>
+    <id>2</id>
+    <interesses>
+        <anunciante>
+            <email>contato@profissional.aol</email>
+            <id>1</id>
+            <nome>Carlos Alberto</nome>
+            <telefone>telefone como string</telefone>
+            <classificacao>3.6</classificacao>
+            <nomeFantasia>Loja de Ferramentas</nomeFantasia>
+        </anunciante>
+        <dataPublicacao>2017-09-13T01:36:01.044-03:00</dataPublicacao>
+        <descricao>Anuncio de Enchada do Carlos</descricao>
+        <disponivel>true</disponivel>
+        <id>3</id>
+        <titulo>Venda de Enchadas</titulo>
+        <valor>12.34</valor>
+    </interesses>
+    <nome>Gabriela</nome>
+    <telefone>123456</telefone>
+</usuario>

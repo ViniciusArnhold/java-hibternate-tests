@@ -2,7 +2,7 @@
   "id" : 3,
   "titulo" : "Venda de Enchadas",
   "descricao" : "Anuncio de Enchada do Carlos",
-  "dataPublicacao" : 1505254844475,
+  "dataPublicacao" : 1505277361044,
   "valor" : 12.34,
   "disponivel" : true,
   "anunciante" : {
@@ -12,6 +12,6 @@
     "email" : "contato@profissional.aol",
     "interesses" : null,
     "classificacao" : 3.6,
-    "nomeFantasia" : "Loja do Ferramentas"
+    "nomeFantasia" : "Loja de Ferramentas"
   }
 }

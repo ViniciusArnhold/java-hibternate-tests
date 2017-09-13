@@ -2,12 +2,13 @@
 <anuncio>
     <anunciante>
         <email>contato@profissional.aol</email>
+        <id>1</id>
         <nome>Carlos Alberto</nome>
         <telefone>telefone como string</telefone>
         <classificacao>3.6</classificacao>
-        <nomeFantasia>Loja do Ferramentas</nomeFantasia>
+        <nomeFantasia>Loja de Ferramentas</nomeFantasia>
     </anunciante>
-    <dataPublicacao>2017-09-12T19:20:44.475-03:00</dataPublicacao>
+    <dataPublicacao>2017-09-13T01:36:01.044-03:00</dataPublicacao>
     <descricao>Anuncio de Enchada do Carlos</descricao>
     <disponivel>true</disponivel>
     <id>3</id>

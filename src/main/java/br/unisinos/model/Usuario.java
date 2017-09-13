@@ -1,13 +1,16 @@
 package br.unisinos.model;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "USUARIO")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
+@XmlRootElement
 public class Usuario implements Serializable {
 
     @Id
@@ -33,8 +36,9 @@ public class Usuario implements Serializable {
 
     }
 
+    @XmlElement
     public Set<Anuncio> getInteresses() {
-        return interesses;
+        return this.interesses;
     }
 
     public Usuario setInteresses(Set<Anuncio> interesses) {
@@ -43,19 +47,21 @@ public class Usuario implements Serializable {
     }
 
     public Usuario addInteresse(Anuncio anuncio) {
-        if (interesses == null) {
+        if (this.interesses == null) {
             this.interesses = new HashSet<>();
         }
         this.interesses.add(anuncio);
         return this;
     }
 
+    @XmlElement
     public long getId() {
-        return id;
+        return this.id;
     }
 
+    @XmlElement
     public String getNome() {
-        return nome;
+        return this.nome;
     }
 
     public Usuario setNome(String nome) {
@@ -63,8 +69,9 @@ public class Usuario implements Serializable {
         return this;
     }
 
+    @XmlElement
     public String getTelefone() {
-        return telefone;
+        return this.telefone;
     }
 
     public Usuario setTelefone(String telefone) {
@@ -72,12 +79,24 @@ public class Usuario implements Serializable {
         return this;
     }
 
+    @XmlElement
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public Usuario setEmail(String email) {
         this.email = email;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + this.id +
+                ", nome='" + this.nome + '\'' +
+                ", telefone='" + this.telefone + '\'' +
+                ", email='" + this.email + '\'' +
+                ", interesses=" + this.interesses +
+                '}';
     }
 }

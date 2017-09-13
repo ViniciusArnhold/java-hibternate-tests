@@ -47,12 +47,12 @@ public class Anuncio implements Serializable {
 
     @XmlElement
     public long getId() {
-        return id;
+        return this.id;
     }
 
     @XmlElement
     public String getTitulo() {
-        return titulo;
+        return this.titulo;
     }
 
     public Anuncio setTitulo(String titulo) {
@@ -62,7 +62,7 @@ public class Anuncio implements Serializable {
 
     @XmlElement
     public String getDescricao() {
-        return descricao;
+        return this.descricao;
     }
 
     public Anuncio setDescricao(String descricao) {
@@ -72,7 +72,7 @@ public class Anuncio implements Serializable {
 
     @XmlElement
     public Date getDataPublicacao() {
-        return dataPublicacao;
+        return this.dataPublicacao;
     }
 
     public Anuncio setDataPublicacao(Date dataPublicacao) {
@@ -82,7 +82,7 @@ public class Anuncio implements Serializable {
 
     @XmlElement
     public double getValor() {
-        return valor;
+        return this.valor;
     }
 
     public Anuncio setValor(double valor) {
@@ -92,7 +92,7 @@ public class Anuncio implements Serializable {
 
     @XmlElement
     public boolean isDisponivel() {
-        return disponivel;
+        return this.disponivel;
     }
 
     public Anuncio setDisponivel(boolean disponivel) {
@@ -102,19 +102,19 @@ public class Anuncio implements Serializable {
 
     @XmlElement
     public Anunciante getAnunciante() {
-        return anunciante;
+        return this.anunciante;
     }
 
     @Override
     public String toString() {
         return "Anuncio{" +
-                "id=" + id +
-                ", titulo='" + titulo + '\'' +
-                ", descricao='" + descricao + '\'' +
-                ", dataPublicacao=" + dataPublicacao +
-                ", valor=" + valor +
-                ", disponivel=" + disponivel +
-                ", idAnunciante=" + anunciante.getNomeFantasia() +
+                "id=" + this.id +
+                ", titulo='" + this.titulo + '\'' +
+                ", descricao='" + this.descricao + '\'' +
+                ", dataPublicacao=" + this.dataPublicacao +
+                ", valor=" + this.valor +
+                ", disponivel=" + this.disponivel +
+                ", idAnunciante=" + this.anunciante.getId() +
                 '}';
     }
 }

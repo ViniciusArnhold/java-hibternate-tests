@@ -3,12 +3,15 @@ package br.unisinos.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "ANUNCIANTE")
+@XmlRootElement
 public class Anunciante extends Usuario implements Serializable {
 
     @Column(nullable = false)
@@ -24,8 +27,9 @@ public class Anunciante extends Usuario implements Serializable {
     public Anunciante() {
     }
 
+    @XmlElement
     public double getClassificacao() {
-        return classificacao;
+        return this.classificacao;
     }
 
     public Anunciante setClassificacao(double classificacao) {
@@ -33,8 +37,9 @@ public class Anunciante extends Usuario implements Serializable {
         return this;
     }
 
+    @XmlElement
     public String getNomeFantasia() {
-        return nomeFantasia;
+        return this.nomeFantasia;
     }
 
     public Anunciante setNomeFantasia(String nomeFantasia) {
@@ -61,11 +66,11 @@ public class Anunciante extends Usuario implements Serializable {
     }
 
     public Set<Anuncio> getAnuncios() {
-        return anuncios;
+        return this.anuncios;
     }
 
     public Anunciante addAnuncio(Anuncio anuncio) {
-        if(this.anuncios == null) {
+        if (this.anuncios == null) {
             this.anuncios = new HashSet<>();
         }
         this.anuncios.add(anuncio);
@@ -75,9 +80,9 @@ public class Anunciante extends Usuario implements Serializable {
     @Override
     public String toString() {
         return "Anunciante{" +
-                "classificacao=" + classificacao +
-                ", nomeFantasia='" + nomeFantasia + '\'' +
-                ", anuncios=" + anuncios +
+                "classificacao=" + this.classificacao +
+                ", nomeFantasia='" + this.nomeFantasia + '\'' +
+                ", anuncios=" + this.anuncios +
                 '}';
     }
 }

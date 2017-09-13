@@ -2,6 +2,7 @@ package br.unisinos;
 
 import br.unisinos.dao.AnuncianteDAO;
 import br.unisinos.dao.AnuncioDAO;
+import br.unisinos.dao.UsuarioDAO;
 import br.unisinos.marshal.JAXBMarshaller;
 import br.unisinos.marshal.JacksonMarshaller;
 import br.unisinos.marshal.Marshaller;
@@ -12,8 +13,15 @@ import br.unisinos.model.Usuario;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.SchemaOutputResolver;
+import javax.xml.transform.Result;
+import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,15 +50,51 @@ public class Main {
 
     private void doRun() throws Exception {
 
+        generateSchemas(Anunciante.class, Anuncio.class, Usuario.class);
+
         adicionarDados();
 
-        List<Anuncio> anuncios = new AnuncioDAO().listarTodosAnuncios();
+        //Query
+        AnuncianteDAO anuncianteDAO = new AnuncianteDAO(this.entityManager);
+        UsuarioDAO usuarioDAO = new UsuarioDAO(this.entityManager);
 
-        AnuncianteDAO anuncianteDAO = new AnuncianteDAO();
-        anuncios.forEach(anuncio -> anuncianteDAO.listarAnuncios(anuncio.getAnunciante(), Integer.MAX_VALUE));
+        List<Usuario> usuarios = usuarioDAO.listarTodosUsuarios();
 
-        marshalAll(anuncios, new JAXBMarshaller(Anuncio.class, Anunciante.class));
-        marshalAll(anuncios, new JacksonMarshaller());
+        List<Anuncio> anuncios = new AnuncioDAO(this.entityManager).listarTodosAnuncios();
+
+        List<Anunciante> anunciantes = anuncianteDAO.listarTodosAnunciantes();
+
+        anuncios.forEach(anuncio -> anuncianteDAO.listarAnunciosDoAnunciante(anuncio.getAnunciante(), Integer.MAX_VALUE));
+
+        List<Usuario> usuariosComAoMenosUmInteresse = usuarioDAO.listarUsuarioComInteresses(1);
+
+        usuariosComAoMenosUmInteresse.forEach(usuarioDAO::listarAnunciosRelacionados);
+
+        //Marshall
+        JAXBMarshaller xmlMarshaller = new JAXBMarshaller(Anuncio.class, Anunciante.class, Usuario.class);
+        JacksonMarshaller jsonMarshaller = new JacksonMarshaller();
+
+        marshalAll(usuarios, xmlMarshaller);
+        marshalAll(usuarios, jsonMarshaller);
+
+        marshalAll(anunciantes, xmlMarshaller);
+        marshalAll(anunciantes, jsonMarshaller);
+
+        marshalAll(anuncios, xmlMarshaller);
+        marshalAll(anuncios, jsonMarshaller);
+    }
+
+    private void generateSchemas(Class<?>... clz) throws JAXBException, IOException {
+        JAXBContext.newInstance(clz).generateSchema(new SchemaOutputResolver() {
+            @Override
+            public Result createOutput(String namespaceUri, String suggestedFileName) throws IOException {
+                File file = new File(Main.this.rootExport, String.format("schemas/%s/", suggestedFileName));
+                file.getParentFile().mkdirs();
+                StreamResult result = new StreamResult(file);
+                result.setSystemId(file.toURI().toURL().toString());
+                return result;
+            }
+        });
     }
 
 
@@ -58,7 +102,7 @@ public class Main {
 
         int count = 1;
         for (T obj : objs) {
-            File file = new File(rootExport, String.format("/export/%s/%s/%s",
+            File file = new File(this.rootExport, String.format("/marshall/%s/%s/%s",
                     marshaller.getExtensionName(),
                     obj.getClass().getSimpleName(),
                     marshaller.fileNameFor(obj, Integer.toString(count++))));
@@ -72,14 +116,13 @@ public class Main {
 
     private void adicionarDados() {
 
-        entityManager.getTransaction().begin();
+        this.entityManager.getTransaction().begin();
         try {
-
             Anunciante anunciante = new Anunciante()
                     .setNome("Carlos Alberto")
                     .setTelefone("telefone como string")
                     .setEmail("contato@profissional.aol")
-                    .setNomeFantasia("Loja do Ferramentas")
+                    .setNomeFantasia("Loja de Ferramentas")
                     .setClassificacao(3.6D);
 
             Usuario interessado1 = new Usuario()
@@ -93,7 +136,7 @@ public class Main {
                     .setEmail("ola@hello.me");
 
             Anuncio anuncioDeFerramentas = new Anuncio(anunciante)
-                    .setDataPublicacao(new java.util.Date())
+                    .setDataPublicacao(new Date())
                     .setTitulo("Venda de Enchadas")
                     .setDescricao("Anuncio de Enchada do Carlos")
                     .setDisponivel(true)
@@ -103,17 +146,17 @@ public class Main {
 
             interessado1.addInteresse(anuncioDeFerramentas);
 
-            entityManager.persist(anunciante);
+            this.entityManager.persist(anunciante);
 
-            entityManager.persist(interessado1);
+            this.entityManager.persist(interessado1);
 
-            entityManager.persist(interessado2);
+            this.entityManager.persist(interessado2);
 
-            entityManager.getTransaction().commit();
+            this.entityManager.getTransaction().commit();
 
 
         } catch (Throwable e) {
-            entityManager.getTransaction().rollback();
+            this.entityManager.getTransaction().rollback();
             throw e;
         }
 

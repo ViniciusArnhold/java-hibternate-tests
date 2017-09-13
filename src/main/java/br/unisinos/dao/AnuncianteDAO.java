@@ -4,16 +4,20 @@ import br.unisinos.model.Anunciante;
 import br.unisinos.model.Anuncio;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class AnuncianteDAO {
 
-    @PersistenceContext
     private EntityManager em;
 
-    public Set<Anuncio> listarAnuncios(Anunciante anunciante, int tamanho) {
+    public AnuncianteDAO(EntityManager entityManager) {
+        this.em = entityManager;
+    }
+
+    public Set<Anuncio> listarAnunciosDoAnunciante(Anunciante anunciante, int tamanho) {
         TypedQuery<Anunciante> query =
                 this.em.createQuery(
                         "select anunciante " +
@@ -21,15 +25,30 @@ public class AnuncianteDAO {
                                 "where anunciante.id = :aId", Anunciante.class);
         query.setParameter("aId", anunciante.getId());
 
-        Anunciante resultList = query.setMaxResults(tamanho).getSingleResult();
+        Anunciante resultList = query.getSingleResult();
+
+        Set<Anuncio> result = resultList.getAnuncios().stream().limit(tamanho).collect(Collectors.toSet());
 
         System.out.println("Todos os anuncios do Anunciante: " + anunciante.getNome());
 
-        resultList.getAnuncios().forEach(System.out::println);
+        result.forEach(System.out::println);
 
         System.out.println("-----------------------------");
 
-        return resultList.getAnuncios();
+        return result;
+    }
 
+    public List<Anunciante> listarTodosAnunciantes() {
+        TypedQuery<Anunciante> query = this.em.createQuery(
+                "select anunciante " +
+                        "from Anunciante anunciante", Anunciante.class);
+
+        List<Anunciante> resultList = query.getResultList();
+
+        System.out.println("Todos os Anunciantes: ");
+        resultList.forEach(System.out::println);
+        System.out.println("-------------------");
+
+        return resultList;
     }
 }
