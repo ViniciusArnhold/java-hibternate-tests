@@ -46,6 +46,8 @@ public class Main {
         Main instance = new Main(factory.createEntityManager());
 
         instance.doRun();
+
+        factory.close();
     }
 
     private void doRun() throws Exception {

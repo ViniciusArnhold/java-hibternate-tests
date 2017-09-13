@@ -7,7 +7,7 @@
     "id" : 3,
     "titulo" : "Venda de Enchadas",
     "descricao" : "Anuncio de Enchada do Carlos",
-    "dataPublicacao" : 1505277361044,
+    "dataPublicacao" : 1505277728262,
     "valor" : 12.34,
     "disponivel" : true,
     "anunciante" : {
