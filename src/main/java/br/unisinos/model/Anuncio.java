@@ -45,14 +45,39 @@ public class Anuncio implements Serializable {
         this.anunciante = Objects.requireNonNull(anunciante);
     }
 
-    @XmlElement
+    @XmlElement(required = true)
+    public String getTitulo() {
+        return this.titulo;
+    }
+
+    @XmlElement(required = true)
+    public String getDescricao() {
+        return this.descricao;
+    }
+
+    @XmlElement(required = true)
+    public Date getDataPublicacao() {
+        return this.dataPublicacao;
+    }
+
+    @XmlElement(required = true)
     public long getId() {
         return this.id;
     }
 
-    @XmlElement
-    public String getTitulo() {
-        return this.titulo;
+    @XmlElement(required = true)
+    public double getValor() {
+        return this.valor;
+    }
+
+    @XmlElement(required = false, defaultValue = "false")
+    public boolean isDisponivel() {
+        return this.disponivel;
+    }
+
+    @XmlElement(required = true)
+    public Anunciante getAnunciante() {
+        return this.anunciante;
     }
 
     public Anuncio setTitulo(String titulo) {
@@ -60,19 +85,9 @@ public class Anuncio implements Serializable {
         return this;
     }
 
-    @XmlElement
-    public String getDescricao() {
-        return this.descricao;
-    }
-
     public Anuncio setDescricao(String descricao) {
         this.descricao = descricao;
         return this;
-    }
-
-    @XmlElement
-    public Date getDataPublicacao() {
-        return this.dataPublicacao;
     }
 
     public Anuncio setDataPublicacao(Date dataPublicacao) {
@@ -80,29 +95,14 @@ public class Anuncio implements Serializable {
         return this;
     }
 
-    @XmlElement
-    public double getValor() {
-        return this.valor;
-    }
-
     public Anuncio setValor(double valor) {
         this.valor = valor;
         return this;
     }
 
-    @XmlElement
-    public boolean isDisponivel() {
-        return this.disponivel;
-    }
-
     public Anuncio setDisponivel(boolean disponivel) {
         this.disponivel = disponivel;
         return this;
-    }
-
-    @XmlElement
-    public Anunciante getAnunciante() {
-        return this.anunciante;
     }
 
     @Override

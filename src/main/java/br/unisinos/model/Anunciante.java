@@ -3,6 +3,7 @@ package br.unisinos.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
@@ -27,7 +28,7 @@ public class Anunciante extends Usuario implements Serializable {
     public Anunciante() {
     }
 
-    @XmlElement
+    @XmlElement(required = true)
     public double getClassificacao() {
         return this.classificacao;
     }
@@ -37,7 +38,7 @@ public class Anunciante extends Usuario implements Serializable {
         return this;
     }
 
-    @XmlElement
+    @XmlElement(required = true)
     public String getNomeFantasia() {
         return this.nomeFantasia;
     }

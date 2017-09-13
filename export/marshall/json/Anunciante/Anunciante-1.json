@@ -1,9 +1,0 @@
-{
-  "id" : 1,
-  "nome" : "Carlos Alberto",
-  "telefone" : "telefone como string",
-  "email" : "contato@profissional.aol",
-  "interesses" : null,
-  "classificacao" : 3.6,
-  "nomeFantasia" : "Loja de Ferramentas"
-}

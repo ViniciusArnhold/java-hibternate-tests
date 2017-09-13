@@ -18,10 +18,13 @@ public class Usuario implements Serializable {
     @Column(name = "USUARIO_ID")
     private long id;
 
+    @Column(nullable = false)
     private String nome;
 
+    @Column(nullable = false)
     private String telefone;
 
+    @Column(nullable = false)
     private String email;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -30,30 +33,40 @@ public class Usuario implements Serializable {
     }, inverseJoinColumns = {
             @JoinColumn(name = "ANUNCIO_ID")
     })
-    private Set<Anuncio> interesses;
+    private Set<Anuncio> interesses = new HashSet<>();
 
-    @XmlElement
+    @XmlElement(required = true)
     public Set<Anuncio> getInteresses() {
         return this.interesses;
     }
 
-    @XmlElement
+    public Usuario setInteresses(Set<Anuncio> interesses) {
+        this.interesses = interesses;
+        return this;
+    }
+
+    @XmlElement(required = true)
     public long getId() {
         return this.id;
     }
 
-    @XmlElement
+    @XmlElement(required = true)
     public String getNome() {
         return this.nome;
     }
 
-    @XmlElement
+    public Usuario setNome(String nome) {
+        this.nome = nome;
+        return this;
+    }
+
+    @XmlElement(required = true)
     public String getTelefone() {
         return this.telefone;
     }
 
-    public Usuario setInteresses(Set<Anuncio> interesses) {
-        this.interesses = interesses;
+    public Usuario setTelefone(String telefone) {
+        this.telefone = telefone;
         return this;
     }
 
@@ -62,18 +75,6 @@ public class Usuario implements Serializable {
             this.interesses = new HashSet<>();
         }
         this.interesses.add(anuncio);
-        return this;
-    }
-
-
-    public Usuario setNome(String nome) {
-        this.nome = nome;
-        return this;
-    }
-
-
-    public Usuario setTelefone(String telefone) {
-        this.telefone = telefone;
         return this;
     }
 

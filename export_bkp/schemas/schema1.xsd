@@ -2,7 +2,7 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             targetNamespace="urn:Test.Namespace"
             xmlns="urn:Test.Namespace"
-            elementFormDefault="qualified">
+            elementFormDefault="unqualified">
 
     <xsd:element name="anunciante" type="anunciante"/>
 

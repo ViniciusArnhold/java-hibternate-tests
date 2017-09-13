@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<anunciante>
-    <email>contato@profissional.aol</email>
-    <id>1</id>
-    <nome>Carlos Alberto</nome>
-    <telefone>telefone como string</telefone>
-    <classificacao>3.6</classificacao>
-    <nomeFantasia>Loja de Ferramentas</nomeFantasia>
-</anunciante>

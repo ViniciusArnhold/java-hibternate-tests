@@ -25,10 +25,12 @@ import javax.xml.validation.SchemaFactory;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public class Main {
@@ -42,9 +44,11 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
-
-        System.setProperty("log4j.logger.org.hibernate", "severe");
+        List<String> loggers = Collections.list(LogManager.getLogManager().getLoggerNames());
+        loggers.add(Logger.getGlobal().getName());
+        for (String logger : loggers) {
+            Logger.getLogger(logger).setLevel(Level.OFF);
+        }
 
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("bd2_anuncios");
 
