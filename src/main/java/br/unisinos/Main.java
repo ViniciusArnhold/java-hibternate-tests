@@ -9,20 +9,25 @@ import br.unisinos.marshal.Marshaller;
 import br.unisinos.model.Anunciante;
 import br.unisinos.model.Anuncio;
 import br.unisinos.model.Usuario;
+import org.xml.sax.SAXException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,7 +57,7 @@ public class Main {
 
     private void doRun() throws Exception {
 
-        generateSchemas(Anunciante.class, Anuncio.class, Usuario.class);
+        Schema schema = generateSchema(Anunciante.class, Anuncio.class, Usuario.class);
 
         adicionarDados();
 
@@ -73,7 +78,7 @@ public class Main {
         usuariosComAoMenosUmInteresse.forEach(usuarioDAO::listarAnunciosRelacionados);
 
         //Marshall
-        JAXBMarshaller xmlMarshaller = new JAXBMarshaller(Anuncio.class, Anunciante.class, Usuario.class);
+        JAXBMarshaller xmlMarshaller = new JAXBMarshaller(schema, Anuncio.class, Anunciante.class, Usuario.class);
         JacksonMarshaller jsonMarshaller = new JacksonMarshaller();
 
         marshalAll(usuarios, xmlMarshaller);
@@ -86,7 +91,8 @@ public class Main {
         marshalAll(anuncios, jsonMarshaller);
     }
 
-    private void generateSchemas(Class<?>... clz) throws JAXBException, IOException {
+    private Schema generateSchema(Class<?>... clz) throws JAXBException, IOException, SAXException {
+        AtomicReference<File> fileOut = new AtomicReference<>();
         JAXBContext.newInstance(clz).generateSchema(new SchemaOutputResolver() {
             @Override
             public Result createOutput(String namespaceUri, String suggestedFileName) throws IOException {
@@ -94,9 +100,11 @@ public class Main {
                 file.getParentFile().mkdirs();
                 StreamResult result = new StreamResult(file);
                 result.setSystemId(file.toURI().toURL().toString());
+                fileOut.set(file);
                 return result;
             }
         });
+        return SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(fileOut.get());
     }
 
 
@@ -127,6 +135,15 @@ public class Main {
                     .setNomeFantasia("Loja de Ferramentas")
                     .setClassificacao(3.6D);
 
+            Anuncio anuncioDeFerramentas = new Anuncio(anunciante)
+                    .setDataPublicacao(new Date())
+                    .setTitulo("Venda de Enchadas")
+                    .setDescricao("Anuncio de Enchada do Carlos")
+                    .setDisponivel(true)
+                    .setValor(12.34);
+
+            anunciante.addAnuncio(anuncioDeFerramentas);
+
             Usuario interessado1 = new Usuario()
                     .setNome("Gabriela")
                     .setTelefone("123456")
@@ -137,15 +154,6 @@ public class Main {
                     .setTelefone("98765")
                     .setEmail("ola@hello.me");
 
-            Anuncio anuncioDeFerramentas = new Anuncio(anunciante)
-                    .setDataPublicacao(new Date())
-                    .setTitulo("Venda de Enchadas")
-                    .setDescricao("Anuncio de Enchada do Carlos")
-                    .setDisponivel(true)
-                    .setValor(12.34);
-
-            anunciante.addAnuncio(anuncioDeFerramentas);
-
             interessado1.addInteresse(anuncioDeFerramentas);
 
             this.entityManager.persist(anunciante);
@@ -155,8 +163,6 @@ public class Main {
             this.entityManager.persist(interessado2);
 
             this.entityManager.getTransaction().commit();
-
-
         } catch (Throwable e) {
             this.entityManager.getTransaction().rollback();
             throw e;

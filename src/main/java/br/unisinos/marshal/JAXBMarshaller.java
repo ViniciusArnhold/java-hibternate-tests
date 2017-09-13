@@ -3,6 +3,7 @@ package br.unisinos.marshal;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.validation.Schema;
 import java.io.OutputStream;
 
 public class JAXBMarshaller implements Marshaller {
@@ -11,9 +12,10 @@ public class JAXBMarshaller implements Marshaller {
     private final javax.xml.bind.Marshaller marshaller;
     private final Unmarshaller unmarshaller;
 
-    public JAXBMarshaller(Class<?>... recognizedClasses) throws JAXBException {
+    public JAXBMarshaller(Schema schema, Class<?>... recognizedClasses) throws JAXBException {
         this.context = JAXBContext.newInstance(recognizedClasses);
         this.marshaller = this.context.createMarshaller();
+        this.marshaller.setSchema(schema);
         this.marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
         this.unmarshaller = this.context.createUnmarshaller();
     }

@@ -1,5 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<usuario>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<usuario xmlns="urn:Test.Namespace"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="urn:Test.Namespace file://../../../schemas/schema1.xsd">
     <email>not@real.ly</email>
     <id>2</id>
     <interesses>
@@ -11,7 +13,7 @@
             <classificacao>3.6</classificacao>
             <nomeFantasia>Loja de Ferramentas</nomeFantasia>
         </anunciante>
-        <dataPublicacao>2017-09-13T02:40:58.161-03:00</dataPublicacao>
+        <dataPublicacao>2017-09-13T01:57:32.923-03:00</dataPublicacao>
         <descricao>Anuncio de Enchada do Carlos</descricao>
         <disponivel>true</disponivel>
         <id>3</id>

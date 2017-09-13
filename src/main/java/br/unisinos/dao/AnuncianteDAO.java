@@ -30,9 +30,7 @@ public class AnuncianteDAO {
         Set<Anuncio> result = resultList.getAnuncios().stream().limit(tamanho).collect(Collectors.toSet());
 
         System.out.println("Todos os anuncios do Anunciante: " + anunciante.getNome());
-
         result.forEach(System.out::println);
-
         System.out.println("-----------------------------");
 
         return result;

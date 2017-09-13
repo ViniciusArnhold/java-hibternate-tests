@@ -32,13 +32,24 @@ public class Usuario implements Serializable {
     })
     private Set<Anuncio> interesses;
 
-    public Usuario() {
-
-    }
-
     @XmlElement
     public Set<Anuncio> getInteresses() {
         return this.interesses;
+    }
+
+    @XmlElement
+    public long getId() {
+        return this.id;
+    }
+
+    @XmlElement
+    public String getNome() {
+        return this.nome;
+    }
+
+    @XmlElement
+    public String getTelefone() {
+        return this.telefone;
     }
 
     public Usuario setInteresses(Set<Anuncio> interesses) {
@@ -54,25 +65,12 @@ public class Usuario implements Serializable {
         return this;
     }
 
-    @XmlElement
-    public long getId() {
-        return this.id;
-    }
-
-    @XmlElement
-    public String getNome() {
-        return this.nome;
-    }
 
     public Usuario setNome(String nome) {
         this.nome = nome;
         return this;
     }
 
-    @XmlElement
-    public String getTelefone() {
-        return this.telefone;
-    }
 
     public Usuario setTelefone(String telefone) {
         this.telefone = telefone;
